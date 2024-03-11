@@ -8,7 +8,7 @@ module.exports = (app) => {
     //metodo de la API que agrega un país
     app.post("/paises", controlPais.agregar);
     //metodo de la API que modifica un país
-    app.put("/paises/:id", controlPais.modificar);
+    app.put("/paises/", controlPais.modificar);
     //metodo de la API que elimina un país
     app.delete("/paises/:id", controlPais.eliminar);
 }

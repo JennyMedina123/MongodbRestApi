@@ -84,68 +84,66 @@ Pais.agregar = async function (pais, resultado) {
     }
 }
 //metodo que modifica un registro
-Pais.modificar = (pais, resultado) => {
+Pais.modificar = async (pais, resultado) => {
     //obtener objeto de conexion a la base de datos
     const basedatos = bd.obtenerBD();
     //Ejecutar la consulta
-    basedatos.collection('paises')
-        //***** Código Mongo *****
-        .updateOne(
-            { id: pais.id },
-            {
-                $set: {
-                    nombre: pais.nombre,
-                    continente: pais.continente,
-                    tipoRegion: pais.tipoRegion,
-                    codigoAlfa2: pais.codigoAlfa2,
-                    codigoAlfa3: pais.codigoAlfa3,
-                }
-            }
-            //************************
-            , function (err, res) {
-                if (err) {
-                    resultado(err, null);
-                    console.log("Error modificando país", err);
-                }
-                //La consulta no afectó registros
-                if (res.modifiedCount == 0) {
-                    //No se encontraron registros
-                    resultado({ mensaje: "No actualizado" }, null);
-                    console.log("No se actualizó el país ", pais);
-                    return;
-                }
-                console.log("Se modificó con éxito el país: ", pais);
-                resultado(null, pais);
-            }
-        );
-}
-//metodo que elimina un registro
-Pais.eliminar = (idPais, resultado) => {
-    //obtener objeto de conexion a la base de datos
-    const basedatos = bd.obtenerBaseDatos();
-    //Ejecutar la consulta
-    basedatos.collection('paises')
-        //***** Código Mongo *****
-        .deleteOne(
+    try {
 
-            { id: eval(idPais) }
-            //************************
-            , function (err, res) {
-                if (err) {
-                    resultado(err, null);
-                    console.log("Error eliminando país", err);
-                    return;
-                }
-                //La consulta no afectó registros
-                if (res.deletedCount == 0) {
-                    //No se encontraron registros
-                    resultado({ mensaje: "No encontrado" }, null);
-                    console.log("No se encontró el país con id=", idPais);
-                    return;
-                }
-                console.log("Se eliminó con éxito el país con id=", idPais);
-                resultado(null, res);
-            }
-        );
+        const res = await basedatos.collection('paises')
+            //***** Código Mongo *****
+            .updateOne(
+                { _id: pais.id },
+                [{
+                    $set: {
+                        nombre: pais.nombre,
+                        continente: pais.continente,
+                        tipoRegion: pais.tipoRegion,
+                        codigoAlfa2: pais.codigoAlfa2,
+                        codigoAlfa3: pais.codigoAlfa3,
+                    }
+                }]);
+        console.log({ res });
+        //************************
+        if (res.matchedCount == 0) {
+            //No se encontraron registros
+            console.log("No se actualizó el país ", pais);
+            resultado({ mensaje: "No actualizado" }, null);
+        }
+        resultado(null, {ok: "Elemento actualizado"});
+    } catch (error) {
+        console.log("No se encuentra el registro", err);
+        resultado(err, null);
+    }
 }
-module.exports = Pais;
+
+    //metodo que elimina un registro
+    Pais.eliminar = (idPais, resultado) => {
+        //obtener objeto de conexion a la base de datos
+        const basedatos = bd.obtenerBaseDatos();
+        //Ejecutar la consulta
+        basedatos.collection('paises')
+            //***** Código Mongo *****
+            .deleteOne(
+
+                { id: eval(idPais) }
+                //************************
+                , function (err, res) {
+                    if (err) {
+                        resultado(err, null);
+                        console.log("Error eliminando país", err);
+                        return;
+                    }
+                    //La consulta no afectó registros
+                    if (res.deletedCount == 0) {
+                        //No se encontraron registros
+                        resultado({ mensaje: "No encontrado" }, null);
+                        console.log("No se encontró el país con id=", idPais);
+                        return;
+                    }
+                    console.log("Se eliminó con éxito el país con id=", idPais);
+                    resultado(null, res);
+                }
+            );
+    }
+    module.exports = Pais;
