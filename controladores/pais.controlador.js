@@ -69,12 +69,11 @@ exports.eliminar = (req, res) => {
         (err, datos) => {
             //verificar si hubo error
             if (err) {
-                return res.status(500).send({ mensaje: 'Error eliminando el país' });
+                return res.status(500).send(err);
             }
             else {
                 return res.send({
-                    mensaje: `Se eliminó el país con
-id=${req.params.id}`
+                    mensaje: `Se eliminó el país con id=${req.params.id}`
                 });
             }
         }

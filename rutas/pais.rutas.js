@@ -6,7 +6,7 @@ module.exports = (app) => {
     //metodo de la API que obtiene un  único pais
     app.get("/paises/:id", controlPais.listarOne);
     //metodo de la API que agrega un país
-    app.post("/paises", controlPais.agregar);
+    app.post("/paises:id", controlPais.agregar);
     //metodo de la API que modifica un país
     app.put("/paises/", controlPais.modificar);
     //metodo de la API que elimina un país
