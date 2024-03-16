@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 //Dejar disponibles las rutas a los métodos web
 require('./rutas/pais.rutas')(app);
 require('./rutas/region.rutas')(app);
-//require('./rutas/ciudad.rutas')(app);
+require('./rutas/ciudad.rutas')(app);
 
 
 

@@ -12,13 +12,11 @@ Region.listar = async function (idPais, resultado) {
             //***** Código Mongo *****
             .aggregate([
                 { $match: { id: eval(idPais) } }
-            ]).
-            project({
+            ]).project({
                 'regiones.nombre': 1,
                 'regiones.area': 2,
                 'regiones.poblacion': 3,
             })
-
             .toArray();
         resultado(null, regiones[0]['regiones']);
     } catch (err) {
@@ -27,14 +25,14 @@ Region.listar = async function (idPais, resultado) {
 }
 //Metodo que agrega un registro
 Region.agregar = async function (idPais, region, resultado) {
-    console.log({id: eval(idPais), region})
+    console.log({ id: eval(idPais), region })
     try {
         const basedatos = bd.obtenerBD();
         const res = await basedatos.collection('paises')
             //***** Código MongoDB *****
             .updateOne(
                 {
-                    id: eval (idPais)
+                    id: eval(idPais)
                 },
                 {
                     $push: {
@@ -100,7 +98,7 @@ Region.eliminar = async (id, nombreRegion, resultado) => {
     try {
         const res = await basedatos.collection('paises')
             //***** Código MongoDB *****
-            .updateOne({id: eval(id)},
+            .updateOne({ id: eval(id) },
                 {
                     $pull: {
                         regiones:
@@ -119,7 +117,7 @@ Region.eliminar = async (id, nombreRegion, resultado) => {
         }
         console.log("Se eliminó con éxito la region con id= ", id);
         resultado(null, res);
-       
+
     }
     catch (error) {
         console.error("Error eliminando region", error);
